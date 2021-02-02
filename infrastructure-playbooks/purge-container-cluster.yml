@@ -645,6 +645,23 @@
         ansible_os_family == 'RedHat' and
         not is_atomic
 
+    - name: find any service-cid file left
+      find:
+        paths: /run
+        patterns: "ceph-*.service-cid"
+      register: service_cid_files
+
+    - name: rm any service-cid file
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ service_cid_files.files }}"
+
+    - name: rm /sys/fs/cgroup/memory/system.slice/system-ceph
+      file:
+        path: /sys/fs/cgroup/memory/system.slice/system-ceph
+        state: absent
+
 - name: purge ceph directories
 
   hosts:

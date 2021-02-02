@@ -863,6 +863,10 @@
     with_items: "{{ systemd_files.files }}"
     when: ansible_service_mgr == 'systemd'
 
+  - name: rm /sys/fs/cgroup/memory/system.slice/system-ceph
+    file:
+      path: /sys/fs/cgroup/memory/system.slice/system-ceph
+      state: absent
 
 - name: purge fetch directory
 
